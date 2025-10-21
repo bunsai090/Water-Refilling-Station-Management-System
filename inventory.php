@@ -180,6 +180,8 @@ function loadInventory() {
             return response.json();
         })
         .then(data => {
+            console.log('Inventory data received:', data);
+            
             if (data.error) {
                 tbody.innerHTML = `
                     <tr>
@@ -193,9 +195,12 @@ function loadInventory() {
             
             // Update statistics
             if (data.stats) {
-                document.getElementById('totalItems').textContent = data.stats.total_items;
-                document.getElementById('lowStockCount').textContent = data.stats.low_stock_count;
-                document.getElementById('outOfStockCount').textContent = data.stats.out_of_stock_count;
+                console.log('Updating stats:', data.stats);
+                document.getElementById('totalItems').textContent = data.stats.total_items || 0;
+                document.getElementById('lowStockCount').textContent = data.stats.low_stock_count || 0;
+                document.getElementById('outOfStockCount').textContent = data.stats.out_of_stock_count || 0;
+            } else {
+                console.error('No stats data received');
             }
             
             // Display inventory items

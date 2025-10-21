@@ -29,31 +29,23 @@ include 'frontend/assets/includes/header.php';
         
         <div class="reports-grid">
             <div class="report-card">
-                <div class="card">
-                    <h3>Sales Overview</h3>
-                    <canvas id="salesChart" width="400" height="200"></canvas>
-                </div>
+                <h3>Sales Overview</h3>
+                <canvas id="salesChart"></canvas>
             </div>
             
             <div class="report-card">
-                <div class="card">
-                    <h3>Revenue Trends</h3>
-                    <canvas id="revenueChart" width="400" height="200"></canvas>
-                </div>
+                <h3>Revenue Trends</h3>
+                <canvas id="revenueChart"></canvas>
             </div>
             
             <div class="report-card">
-                <div class="card">
-                    <h3>Top Products</h3>
-                    <canvas id="productsChart" width="400" height="200"></canvas>
-                </div>
+                <h3>Top Products</h3>
+                <canvas id="productsChart"></canvas>
             </div>
             
             <div class="report-card">
-                <div class="card">
-                    <h3>Customer Analytics</h3>
-                    <canvas id="customersChart" width="400" height="200"></canvas>
-                </div>
+                <h3>Customer Analytics</h3>
+                <canvas id="customersChart"></canvas>
             </div>
         </div>
         
@@ -108,6 +100,7 @@ function initializeCharts() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 title: {
                     display: true,
@@ -131,6 +124,7 @@ function initializeCharts() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 title: {
                     display: true,
@@ -153,6 +147,7 @@ function initializeCharts() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 title: {
                     display: true,
@@ -176,6 +171,7 @@ function initializeCharts() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 title: {
                     display: true,
@@ -196,60 +192,115 @@ function updateReports() {
 }
 
 function loadReportData(startDate, endDate) {
+    console.log('Loading report data for date range:', startDate, 'to', endDate);
+    
     const params = new URLSearchParams({
         start_date: startDate,
         end_date: endDate
     });
     
     fetch(`backend/admin/reports/get_report_data.php?${params}`)
-        .then(response => response.json())
+        .then(response => {
+            console.log('Report API response status:', response.status);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Report data received:', data);
+            
+            if (data.error) {
+                console.error('Error from server:', data.message);
+                alert('Error loading reports: ' + data.message);
+                return;
+            }
+            
             updateCharts(data);
-            updateSalesTable(data.sales);
+            updateSalesTable(data.sales || []);
         })
         .catch(error => {
             console.error('Error loading report data:', error);
+            alert('Failed to load report data. Please try again.');
         });
 }
 
 function updateCharts(data) {
-    // Update sales chart
-    salesChart.data.labels = data.sales_trend.labels;
-    salesChart.data.datasets[0].data = data.sales_trend.values;
-    salesChart.update();
-    
-    // Update revenue chart
-    revenueChart.data.labels = data.revenue_trend.labels;
-    revenueChart.data.datasets[0].data = data.revenue_trend.values;
-    revenueChart.update();
-    
-    // Update products chart
-    productsChart.data.labels = data.top_products.labels;
-    productsChart.data.datasets[0].data = data.top_products.values;
-    productsChart.update();
-    
-    // Update customers chart
-    customersChart.data.labels = data.customer_growth.labels;
-    customersChart.data.datasets[0].data = data.customer_growth.values;
-    customersChart.update();
+    try {
+        // Update sales chart
+        if (data.sales_trend) {
+            salesChart.data.labels = data.sales_trend.labels || ['No Data'];
+            salesChart.data.datasets[0].data = data.sales_trend.values || [0];
+            salesChart.update();
+            console.log('Sales chart updated');
+        }
+        
+        // Update revenue chart
+        if (data.revenue_trend) {
+            revenueChart.data.labels = data.revenue_trend.labels || ['No Data'];
+            revenueChart.data.datasets[0].data = data.revenue_trend.values || [0];
+            revenueChart.update();
+            console.log('Revenue chart updated');
+        }
+        
+        // Update products chart
+        if (data.top_products) {
+            productsChart.data.labels = data.top_products.labels || ['No Data'];
+            productsChart.data.datasets[0].data = data.top_products.values || [0];
+            productsChart.update();
+            console.log('Products chart updated');
+        }
+        
+        // Update customers chart
+        if (data.customer_growth) {
+            customersChart.data.labels = data.customer_growth.labels || ['No Data'];
+            customersChart.data.datasets[0].data = data.customer_growth.values || [0];
+            customersChart.update();
+            console.log('Customers chart updated');
+        }
+    } catch (error) {
+        console.error('Error updating charts:', error);
+    }
 }
 
 function updateSalesTable(salesData) {
     const tbody = document.querySelector('#salesReportTable tbody');
+    
+    if (!salesData || salesData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No sales data found for selected date range</td></tr>';
+        return;
+    }
+    
     tbody.innerHTML = '';
     
     salesData.forEach(sale => {
         const row = tbody.insertRow();
         row.innerHTML = `
-            <td>${sale.date}</td>
-            <td>${sale.order_id}</td>
-            <td>${sale.customer}</td>
-            <td>${sale.products}</td>
-            <td>${sale.quantity}</td>
-            <td>₱${sale.amount}</td>
-            <td><span class="status ${sale.status}">${sale.status}</span></td>
+            <td>${sale.date || 'N/A'}</td>
+            <td>${sale.order_id || 'N/A'}</td>
+            <td>${sale.customer || 'N/A'}</td>
+            <td>${sale.products || 'N/A'}</td>
+            <td>${sale.quantity || 0}</td>
+            <td>₱${parseFloat(sale.amount || 0).toFixed(2)}</td>
+            <td><span class="status-badge ${getStatusClass(sale.status)}">${formatStatus(sale.status)}</span></td>
         `;
     });
+    console.log('Sales table updated with', salesData.length, 'rows');
+}
+
+function getStatusClass(status) {
+    const statusMap = {
+        'pending': 'warning',
+        'processing': 'info',
+        'delivered': 'success',
+        'cancelled': 'danger'
+    };
+    return statusMap[status] || '';
+}
+
+function formatStatus(status) {
+    if (!status) return 'Unknown';
+    return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
 function generateSalesReport() {

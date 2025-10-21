@@ -183,9 +183,26 @@ function loadPendingOrders() {
         .then(data => {
             const select = document.getElementById('paymentOrder');
             select.innerHTML = '<option value="">Select Order</option>';
+            
+            // Store order data for auto-filling amount
+            window.pendingOrders = {};
+            
             data.forEach(order => {
-                select.innerHTML += `<option value="${order.id}">${order.order_id} - ${order.customer_name}</option>`;
+                window.pendingOrders[order.id] = order.total_amount;
+                select.innerHTML += `<option value="${order.id}" data-amount="${order.total_amount}">${order.order_id} - ${order.customer_name} (₱${parseFloat(order.total_amount).toFixed(2)})</option>`;
             });
+            
+            // Add change listener to auto-fill amount
+            select.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const amount = selectedOption.getAttribute('data-amount');
+                if (amount) {
+                    document.getElementById('paymentAmount').value = parseFloat(amount).toFixed(2);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading pending orders:', error);
         });
 }
 
@@ -339,6 +356,54 @@ function formatDate(dateString) {
 
 document.addEventListener('DOMContentLoaded', function() {
     loadPayments();
+    
+    // Add form submission handler for recording payments
+    const recordPaymentForm = document.getElementById('recordPaymentForm');
+    if (recordPaymentForm) {
+        recordPaymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {
+                order_id: formData.get('order_id'),
+                amount: formData.get('amount'),
+                payment_method: formData.get('payment_method'),
+                reference_number: formData.get('reference_number')
+            };
+            
+            // Validate
+            if (!data.order_id || !data.amount || !data.payment_method) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            console.log('Recording payment:', data);
+            
+            // Send to backend
+            fetch('backend/admin/payments/record_payment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('Payment recorded successfully!');
+                    closeModal('recordPaymentModal');
+                    recordPaymentForm.reset();
+                    loadPayments(); // Reload payment list
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error recording payment:', error);
+                alert('Error recording payment. Please try again.');
+            });
+        });
+    }
 });
 </script>
 

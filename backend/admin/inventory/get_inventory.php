@@ -22,7 +22,7 @@ try {
             COALESCE(i.minimum_stock, 10) as minimum_stock,
             CASE 
                 WHEN COALESCE(i.current_stock, 0) = 0 THEN 'out_of_stock'
-                WHEN COALESCE(i.current_stock, 0) <= COALESCE(i.minimum_stock, 10) THEN 'low_stock'
+                WHEN COALESCE(i.current_stock, 0) > 0 AND COALESCE(i.current_stock, 0) < COALESCE(i.minimum_stock, 10) THEN 'low_stock'
                 ELSE 'in_stock'
             END as stock_status,
             p.created_at
@@ -55,7 +55,8 @@ try {
     $stats = [
         'total_items' => count($inventory),
         'low_stock_count' => 0,
-        'out_of_stock_count' => 0
+        'out_of_stock_count' => 0,
+        'in_stock_count' => 0
     ];
     
     foreach ($inventory as $item) {
@@ -63,14 +64,19 @@ try {
             $stats['low_stock_count']++;
         } elseif ($item['stock_status'] === 'out_of_stock') {
             $stats['out_of_stock_count']++;
+        } else {
+            $stats['in_stock_count']++;
         }
     }
+    
+    // Log for debugging
+    error_log("Inventory Stats: Total={$stats['total_items']}, Low={$stats['low_stock_count']}, Out={$stats['out_of_stock_count']}, In={$stats['in_stock_count']}");
     
     // Return JSON response with both inventory and stats
     echo json_encode([
         'inventory' => $inventory,
         'stats' => $stats
-    ]);
+    ], JSON_PRETTY_PRINT);
     
 } catch (PDOException $e) {
     echo json_encode([

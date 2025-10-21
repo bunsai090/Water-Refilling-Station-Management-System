@@ -250,6 +250,28 @@
     font-weight: 600;
 }
 
+.chart-container canvas {
+    max-height: 300px;
+}
+
+/* Activity List */
+.activity-list {
+    background: white;
+    border-radius: 8px;
+}
+
+.activity-item {
+    transition: background-color 0.2s;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fa;
+}
+
+.activity-item:last-child {
+    border-bottom: none !important;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .sidebar {
@@ -273,5 +295,101 @@
     .dashboard-stats {
         grid-template-columns: 1fr;
         gap: 15px;
+    }
+}
+
+/* Reports & Analytics Styles */
+.reports-controls {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-range label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.date-range input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.report-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.report-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.report-card h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.report-card canvas {
+    max-height: 280px !important;
+    width: 100% !important;
+}
+
+.report-tables {
+    margin-top: 25px;
+}
+
+.report-tables .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+    .reports-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .reports-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-card canvas {
+        max-height: 250px !important;
     }
 }

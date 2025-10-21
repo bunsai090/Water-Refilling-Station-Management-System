@@ -1,3 +1,6 @@
+    <!-- Chart.js MUST load first -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <!-- JavaScript Files -->
     <script src="frontend/assets/js/main.js"></script>
     <?php if(isset($additional_js)): ?>
@@ -5,9 +8,6 @@
             <script src="<?php echo $js; ?>"></script>
         <?php endforeach; ?>
     <?php endif; ?>
-    
-    <!-- Chart.js for reports -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <footer class="footer">
         <div class="container">
