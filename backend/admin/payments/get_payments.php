@@ -18,7 +18,6 @@ try {
             p.order_id,
             o.order_id as order_number,
             c.name as customer_name,
-            c.phone as customer_phone,
             p.amount,
             p.payment_method,
             p.reference_number,

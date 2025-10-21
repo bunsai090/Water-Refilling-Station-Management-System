@@ -17,7 +17,6 @@ try {
             o.order_id,
             o.customer_id,
             c.name as customer_name,
-            c.phone as customer_phone,
             o.total_amount,
             o.status,
             o.delivery_address,
@@ -42,9 +41,8 @@ try {
     
     // Apply search filter
     if (!empty($search)) {
-        $sql .= " AND (o.order_id LIKE ? OR c.name LIKE ? OR c.phone LIKE ?)";
+        $sql .= " AND (o.order_id LIKE ? OR c.name LIKE ?)";
         $searchTerm = "%{$search}%";
-        $params[] = $searchTerm;
         $params[] = $searchTerm;
         $params[] = $searchTerm;
     }
