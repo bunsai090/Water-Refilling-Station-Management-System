@@ -292,67 +292,140 @@ function updateOrderTotal() {
     document.getElementById('orderTotalAmount').textContent = `₱${grandTotal.toFixed(2)}`;
 }
 
-function refreshOrders() {
-    loadOrders();
-}
-
-function filterOrders() {
-    // Implement order filtering
-    const status = document.getElementById('statusFilter').value;
-    console.log('Filtering orders by status:', status);
-}
-
-function searchOrders() {
-    // Implement order search
-    const searchTerm = document.getElementById('orderSearch').value;
-    console.log('Searching orders:', searchTerm);
-}
-
-// Load orders on page load
-document.addEventListener('DOMContentLoaded', function() {
-    loadOrders();
-});
-
 function loadOrders() {
-    // Simulate loading orders
     const tbody = document.querySelector('#ordersTable tbody');
     tbody.innerHTML = `
         <tr>
-            <td colspan="7" class="text-center loading">
+            <td colspan="6" class="text-center loading">
                 <div class="spinner"></div>
                 Loading orders...
             </td>
         </tr>
     `;
     
-    // You can implement actual order loading here
-    setTimeout(() => {
+    // Get filter values
+    const status = document.getElementById('statusFilter')?.value || '';
+    const search = document.getElementById('orderSearch')?.value || '';
+    
+    let url = 'backend/admin/orders/get_orders.php';
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    if (search) params.append('search', search);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center" style="color: #dc3545; padding: 40px;">
+                            ${data.message}
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            console.log('Orders loaded:', data);
+            displayOrders(data);
+        })
+        .catch(error => {
+            console.error('Error loading orders:', error);
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center" style="color: #dc3545; padding: 40px;">
+                        Error loading orders. Please try again.
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+function displayOrders(orders) {
+    const tbody = document.querySelector('#ordersTable tbody');
+    
+    if (orders.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="text-center">No orders found. Click "Create New Order" to get started.</td>
+                <td colspan="6" class="text-center">No orders found.</td>
             </tr>
         `;
-    }, 1000);
+        return;
+    }
+    
+    tbody.innerHTML = orders.map(order => `
+        <tr>
+            <td>${order.order_id}</td>
+            <td>${order.customer_name}</td>
+            <td>${order.items || 'N/A'}</td>
+            <td>₱${parseFloat(order.total_amount).toFixed(2)}</td>
+            <td>
+                <span class="status-badge ${getOrderStatusClass(order.status)}">
+                    ${formatOrderStatus(order.status)}
+                </span>
+            </td>
+            <td>${formatDate(order.created_at)}</td>
+            <td>
+                <button class="btn-action btn-view" onclick="viewOrder(${order.id})" title="View">
+                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#view"></use></svg>
+                </button>
+                <button class="btn-action btn-edit" onclick="editOrder(${order.id})" title="Edit">
+                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#edit"></use></svg>
+                </button>
+                ${order.status === 'pending' ? `
+                    <button class="btn-action btn-delete" onclick="cancelOrder(${order.id})" title="Cancel">
+                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#close"></use></svg>
+                    </button>
+                ` : ''}
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getOrderStatusClass(status) {
+    const statusMap = {
+        'pending': 'warning',
+        'processing': 'info',
+        'delivered': 'success',
+        'cancelled': 'danger'
+    };
+    return statusMap[status] || '';
+}
+
+function formatOrderStatus(status) {
+    const formatMap = {
+        'pending': 'Pending',
+        'processing': 'Processing',
+        'delivered': 'Delivered',
+        'cancelled': 'Cancelled'
+    };
+    return formatMap[status] || status;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 function filterOrders() {
-    const status = document.getElementById('statusFilter').value;
-    // Implement order filtering
+    loadOrders();
+}
+
+function searchOrders() {
+    loadOrders();
 }
 
 function refreshOrders() {
     loadOrders();
-}
-
-function loadOrders() {
-    fetch('backend/admin/orders/get_orders.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Orders loaded:', data);
-        })
-        .catch(error => {
-            console.error('Error loading orders:', error);
-        });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

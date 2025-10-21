@@ -162,7 +162,6 @@ function generateInventoryReport() {
 }
 
 function loadInventory() {
-    // Simulate loading inventory
     const tbody = document.querySelector('#inventoryTable tbody');
     tbody.innerHTML = `
         <tr>
@@ -173,14 +172,100 @@ function loadInventory() {
         </tr>
     `;
     
-    // You can implement actual inventory loading here
-    setTimeout(() => {
+    fetch('backend/admin/inventory/get_inventory.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                            ${data.message}
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Update statistics
+            if (data.stats) {
+                document.getElementById('totalItems').textContent = data.stats.total_items;
+                document.getElementById('lowStockCount').textContent = data.stats.low_stock_count;
+                document.getElementById('outOfStockCount').textContent = data.stats.out_of_stock_count;
+            }
+            
+            // Display inventory items
+            displayInventory(data.inventory || []);
+        })
+        .catch(error => {
+            console.error('Error loading inventory:', error);
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                        Error loading inventory. Please try again.
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+function displayInventory(inventory) {
+    const tbody = document.querySelector('#inventoryTable tbody');
+    
+    if (inventory.length === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="8" class="text-center">No inventory items found. Click "Add Stock" to get started.</td>
             </tr>
         `;
-    }, 1000);
+        return;
+    }
+    
+    tbody.innerHTML = inventory.map(item => `
+        <tr>
+            <td>${item.id}</td>
+            <td>${item.product_name}</td>
+            <td>${item.category || 'N/A'}</td>
+            <td>${item.current_stock}</td>
+            <td>${item.minimum_stock}</td>
+            <td>₱${parseFloat(item.unit_price).toFixed(2)}</td>
+            <td>
+                <span class="status-badge ${getStockStatusClass(item.stock_status)}">
+                    ${formatStockStatus(item.stock_status)}
+                </span>
+            </td>
+            <td>
+                <button class="btn-action btn-edit" onclick="editInventoryItem(${item.id})" title="Edit">
+                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#edit"></use></svg>
+                </button>
+                <button class="btn-action btn-delete" onclick="deleteInventoryItem(${item.id})" title="Delete">
+                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#delete"></use></svg>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getStockStatusClass(status) {
+    const statusMap = {
+        'in_stock': 'success',
+        'low_stock': 'warning',
+        'out_of_stock': 'danger'
+    };
+    return statusMap[status] || '';
+}
+
+function formatStockStatus(status) {
+    const formatMap = {
+        'in_stock': 'In Stock',
+        'low_stock': 'Low Stock',
+        'out_of_stock': 'Out of Stock'
+    };
+    return formatMap[status] || status;
 }
 
 // Load inventory on page load
@@ -248,28 +333,6 @@ window.testModal = testModal;
 window.closeModal = closeModal;
 
 console.log('Inventory page JavaScript loaded successfully');
-
-function updateInventorySummary(data) {
-    document.getElementById('totalItems').textContent = data.length;
-    
-    let lowStockCount = 0;
-    let outOfStockCount = 0;
-    
-    data.forEach(item => {
-        if (item.current_stock <= 0) {
-            outOfStockCount++;
-        } else if (item.current_stock <= item.minimum_stock) {
-            lowStockCount++;
-        }
-    });
-    
-    document.getElementById('lowStockCount').textContent = lowStockCount;
-    document.getElementById('outOfStockCount').textContent = outOfStockCount;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    loadInventory();
-});
 </script>
 
 <?php include 'frontend/assets/includes/footer.php'; ?>

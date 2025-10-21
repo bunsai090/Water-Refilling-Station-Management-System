@@ -208,45 +208,133 @@ function rejectPayment() {
 }
 
 function loadPayments() {
+    const tbody = document.querySelector('#paymentsTable tbody');
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="8" class="text-center loading">
+                <div class="spinner"></div>
+                Loading payments...
+            </td>
+        </tr>
+    `;
+    
     fetch('backend/admin/payments/get_payments.php')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            if (data.error) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                            ${data.message}
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
             console.log('Payments loaded:', data);
-            updatePaymentSummary(data);
+            
+            // Update statistics
+            if (data.stats) {
+                document.getElementById('todayPayments').textContent = '₱' + parseFloat(data.stats.today_total).toFixed(2);
+                document.getElementById('monthPayments').textContent = '₱' + parseFloat(data.stats.month_total).toFixed(2);
+                document.getElementById('pendingPayments').textContent = data.stats.pending_count;
+            }
+            
+            // Display payments
+            displayPayments(data.payments || []);
         })
         .catch(error => {
             console.error('Error loading payments:', error);
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                        Error loading payments. Please try again.
+                    </td>
+                </tr>
+            `;
         });
 }
 
-function updatePaymentSummary(data) {
-    // Calculate and update payment summary
-    const today = new Date().toDateString();
-    const thisMonth = new Date().getMonth();
+function displayPayments(payments) {
+    const tbody = document.querySelector('#paymentsTable tbody');
     
-    let todayTotal = 0;
-    let monthTotal = 0;
-    let pendingCount = 0;
+    if (payments.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center">No payment records found.</td>
+            </tr>
+        `;
+        return;
+    }
     
-    data.forEach(payment => {
-        const paymentDate = new Date(payment.created_at);
-        
-        if (paymentDate.toDateString() === today && payment.status === 'verified') {
-            todayTotal += parseFloat(payment.amount);
-        }
-        
-        if (paymentDate.getMonth() === thisMonth && payment.status === 'verified') {
-            monthTotal += parseFloat(payment.amount);
-        }
-        
-        if (payment.status === 'pending') {
-            pendingCount++;
-        }
-    });
-    
-    document.getElementById('todayPayments').textContent = '₱' + todayTotal.toFixed(2);
-    document.getElementById('monthPayments').textContent = '₱' + monthTotal.toFixed(2);
-    document.getElementById('pendingPayments').textContent = pendingCount;
+    tbody.innerHTML = payments.map(payment => `
+        <tr>
+            <td>${payment.id}</td>
+            <td>${payment.order_number}</td>
+            <td>${payment.customer_name}</td>
+            <td>₱${parseFloat(payment.amount).toFixed(2)}</td>
+            <td>${formatPaymentMethod(payment.payment_method)}</td>
+            <td>
+                <span class="status-badge ${getPaymentStatusClass(payment.status)}">
+                    ${formatPaymentStatus(payment.status)}
+                </span>
+            </td>
+            <td>${formatDate(payment.created_at)}</td>
+            <td>
+                ${payment.status === 'pending' ? `
+                    <button class="btn-action btn-edit" onclick="verifyPayment(${payment.id})" title="Verify">
+                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#check"></use></svg>
+                    </button>
+                    <button class="btn-action btn-delete" onclick="rejectPayment(${payment.id})" title="Reject">
+                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#close"></use></svg>
+                    </button>
+                ` : `
+                    <button class="btn-action btn-view" onclick="viewPayment(${payment.id})" title="View">
+                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#view"></use></svg>
+                    </button>
+                `}
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getPaymentStatusClass(status) {
+    const statusMap = {
+        'pending': 'warning',
+        'verified': 'success',
+        'rejected': 'danger'
+    };
+    return statusMap[status] || '';
+}
+
+function formatPaymentStatus(status) {
+    const formatMap = {
+        'pending': 'Pending',
+        'verified': 'Verified',
+        'rejected': 'Rejected'
+    };
+    return formatMap[status] || status;
+}
+
+function formatPaymentMethod(method) {
+    const formatMap = {
+        'cash': 'Cash',
+        'gcash': 'GCash',
+        'bank_transfer': 'Bank Transfer',
+        'credit_card': 'Credit Card'
+    };
+    return formatMap[method] || method;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
