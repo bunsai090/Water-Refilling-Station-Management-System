@@ -430,6 +430,88 @@ function refreshOrders() {
 
 document.addEventListener('DOMContentLoaded', function() {
     loadOrders();
+    
+    // Add form submission handler
+    const createOrderForm = document.getElementById('createOrderForm');
+    if (createOrderForm) {
+        createOrderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const customer_id = formData.get('customer_id');
+            const delivery_address = formData.get('delivery_address');
+            const delivery_date = formData.get('delivery_date');
+            const notes = formData.get('notes');
+            
+            // Collect items
+            const items = [];
+            const productSelects = document.querySelectorAll('.product-select');
+            
+            productSelects.forEach((select, index) => {
+                const row = select.closest('.order-item-row');
+                const product_id = select.value;
+                const quantity = row.querySelector('.quantity-input').value;
+                const unit_price = row.querySelector('.price-input').value;
+                const total_price = row.querySelector('.total-input').value;
+                
+                if (product_id && quantity && unit_price) {
+                    items.push({
+                        product_id: parseInt(product_id),
+                        quantity: parseInt(quantity),
+                        unit_price: parseFloat(unit_price),
+                        total_price: parseFloat(total_price)
+                    });
+                }
+            });
+            
+            // Validate
+            if (!customer_id) {
+                alert('Please select a customer');
+                return;
+            }
+            
+            if (items.length === 0) {
+                alert('Please add at least one item to the order');
+                return;
+            }
+            
+            // Prepare data
+            const orderData = {
+                customer_id: parseInt(customer_id),
+                delivery_address: delivery_address,
+                delivery_date: delivery_date,
+                notes: notes,
+                items: items
+            };
+            
+            console.log('Creating order:', orderData);
+            
+            // Submit to backend
+            fetch('backend/admin/orders/create_order.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order created successfully! Order ID: ' + data.order_id);
+                    closeModal('createOrderModal');
+                    createOrderForm.reset();
+                    loadOrders(); // Reload the orders table
+                } else {
+                    alert('Error creating order: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating order. Please try again.');
+            });
+        });
+    }
 });
 </script>
 

@@ -296,19 +296,43 @@ document.getElementById('addStockForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
+    const data = {
+        product_id: formData.get('product_id'),
+        quantity: formData.get('quantity'),
+        notes: formData.get('notes')
+    };
     
-    // Here you would normally send the data to the server
-    console.log('Adding stock:', Object.fromEntries(formData));
+    // Validate
+    if (!data.product_id || !data.quantity) {
+        alert('Please select a product and enter quantity');
+        return;
+    }
     
-    // Show success message
-    alert('Stock added successfully!');
+    console.log('Adding stock:', data);
     
-    // Close modal and reset form
-    closeModal('addStockModal');
-    this.reset();
-    
-    // Reload inventory
-    loadInventory();
+    // Send to backend
+    fetch('backend/admin/inventory/add_stock.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(`Stock added successfully!\n${result.product_name}: ${result.new_stock} units in stock`);
+            closeModal('addStockModal');
+            document.getElementById('addStockForm').reset();
+            loadInventory(); // Reload inventory table
+        } else {
+            alert('Error: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error adding stock:', error);
+        alert('Error adding stock. Please try again.');
+    });
 });
 
 // Debug function to test modal
