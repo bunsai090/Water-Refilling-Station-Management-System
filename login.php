@@ -8,8 +8,15 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 }
 
 $page_title = "Admin Login";
-$additional_css = ['frontend/assets/css/login.css'];
-$additional_js = ['frontend/assets/js/auth.js'];
+$additional_css = [
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css',
+    'frontend/assets/css/login.css'
+];
+$additional_js = [
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
+    'frontend/assets/js/auth.js'
+];
 include 'frontend/assets/includes/header.php';
 
 $error_message = '';
@@ -46,36 +53,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="login-container">
-    <div class="login-form">
-        <div class="login-header">
-            <img src="frontend/assets/images/logo.svg" alt="Logo" width="60" height="60">
-            <h2>Admin Login</h2>
-        </div>
-        
-        <?php if (!empty($error_message)): ?>
-            <div class="alert alert-error">
-                <?php echo htmlspecialchars($error_message); ?>
+<div class="login-wrapper">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-5 col-lg-4">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <!-- Logo and Title -->
+                        <div class="text-center mb-4">
+                            <img src="frontend/assets/images/logo.svg" alt="Logo" width="80" height="80" class="mb-3">
+                            <h2 class="fw-bold text-primary mb-2">Admin Login</h2>
+                            <p class="text-muted">Water Refilling Station Management</p>
+                        </div>
+                        
+                        <!-- Error Alert -->
+                        <?php if (!empty($error_message)): ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <?php echo htmlspecialchars($error_message); ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <!-- Login Form -->
+                        <form method="POST" action="" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-semibold">
+                                    <i class="bi bi-person-fill me-1"></i> Username
+                                </label>
+                                <input type="text" 
+                                       class="form-control form-control-lg" 
+                                       id="username" 
+                                       name="username" 
+                                       placeholder="Enter your username"
+                                       value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>"
+                                       required>
+                                <div class="invalid-feedback">Please enter your username.</div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-semibold">
+                                    <i class="bi bi-lock-fill me-1"></i> Password
+                                </label>
+                                <input type="password" 
+                                       class="form-control form-control-lg" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Enter your password"
+                                       required>
+                                <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg fw-semibold">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Footer -->
+                        <div class="text-center mt-4">
+                            <a href="index.php" class="text-decoration-none">
+                                <i class="bi bi-arrow-left me-1"></i> Back to Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Copyright -->
+                <div class="text-center mt-4 text-white-50">
+                    <small>&copy; <?php echo date('Y'); ?> Water Refilling Station. All rights reserved.</small>
+                </div>
             </div>
-        <?php endif; ?>
-        
-        <form method="POST" action="">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required 
-                       value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            
-            <button type="submit" class="btn btn-primary btn-full">Login</button>
-        </form>
-        
-        <div class="login-footer">
-            <a href="index.php">← Back to Home</a>
         </div>
     </div>
 </div>

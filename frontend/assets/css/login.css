@@ -1,145 +1,100 @@
-/* Login page styles */
+/* Login page specific styles with Bootstrap */
 
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+/* Custom gradient background */
+.login-wrapper {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 20px;
+    min-height: 100vh;
 }
 
-.login-form {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    width: 100%;
-    max-width: 420px;
-    position: relative;
-    overflow: hidden;
+/* Card enhancements */
+.login-wrapper .card {
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.6s ease-out;
 }
 
-.login-form::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+/* Logo animation */
+.login-wrapper img {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
 }
 
-.login-header {
-    text-align: center;
-    margin-bottom: 35px;
+.login-wrapper img:hover {
+    transform: scale(1.05);
 }
 
-.login-header img {
-    margin-bottom: 15px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-}
-
-.login-form h2 {
-    margin: 0;
-    color: #2c3e50;
-    font-weight: 600;
-    font-size: 1.8rem;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #495057;
-    font-size: 14px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 15px 18px;
+/* Form inputs custom styling */
+.login-wrapper .form-control {
     border: 2px solid #e9ecef;
-    border-radius: 10px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    background: #f8f9fa;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #007bff;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    transform: translateY(-1px);
-}
-
-.btn-full {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 10px;
-    border-radius: 10px;
     transition: all 0.3s ease;
 }
 
-.btn-full:hover {
+.login-wrapper .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.15);
+}
+
+/* Button gradient */
+.login-wrapper .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.login-wrapper .btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #663a8c 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
 }
 
-.login-footer {
-    text-align: center;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #e9ecef;
+.login-wrapper .btn-primary:active {
+    transform: translateY(0);
 }
 
-.login-footer a {
-    color: #6c757d;
-    text-decoration: none;
-    font-size: 14px;
+/* Link styling */
+.login-wrapper a {
+    color: #667eea;
     transition: color 0.3s ease;
 }
 
-.login-footer a:hover {
-    color: #007bff;
+.login-wrapper a:hover {
+    color: #764ba2;
 }
 
-/* Enhanced alert styling for login page */
-.login-form .alert {
-    margin-bottom: 25px;
-    border-radius: 10px;
+/* Alert custom styling */
+.login-wrapper .alert {
+    border-radius: 12px;
     border: none;
-    font-size: 14px;
 }
 
-.login-form .alert-error {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+/* Form label icons */
+.login-wrapper .form-label i {
+    color: #667eea;
 }
 
-/* Responsive design for login */
-@media (max-width: 480px) {
-    .login-container {
-        padding: 15px;
+/* Fade in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .login-wrapper .card-body {
+        padding: 2rem !important;
     }
     
-    .login-form {
-        padding: 30px 25px;
-    }
-    
-    .login-form h2 {
+    .login-wrapper h2 {
         font-size: 1.5rem;
     }
     
-    .form-group input {
-        padding: 12px 15px;
-        font-size: 16px; /* Prevent zoom on iOS */
+    .login-wrapper img {
+        width: 60px !important;
+        height: 60px !important;
     }
 }

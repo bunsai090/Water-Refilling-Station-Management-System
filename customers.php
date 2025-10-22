@@ -94,13 +94,69 @@ include 'frontend/assets/includes/header.php';
     </div>
 </div>
 
+<!-- View Customer Modal -->
+<div id="viewCustomerModal" class="modal">
+    <div class="modal-content modal-view">
+        <div class="modal-header">
+            <h3>Customer Information</h3>
+            <button class="modal-close" onclick="closeModal('viewCustomerModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="customer-info-grid">
+                <div class="info-row">
+                    <span class="info-label">ID</span>
+                    <span class="info-value" id="viewCustomerId">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Full Name</span>
+                    <span class="info-value" id="viewCustomerName">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone</span>
+                    <span class="info-value" id="viewCustomerPhone">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" id="viewCustomerEmail">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Address</span>
+                    <span class="info-value" id="viewCustomerAddress">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value" id="viewCustomerStatus">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Registered</span>
+                    <span class="info-value" id="viewCustomerCreated">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('viewCustomerModal')">Close</button>
+        </div>
+    </div>
+</div>
+
 <script>
 function openAddCustomerModal() {
+    // Reset form to "Add" mode
+    document.getElementById('addCustomerForm').reset();
+    document.getElementById('addCustomerForm').removeAttribute('data-customer-id');
+    document.querySelector('#addCustomerModal .modal-header h3').textContent = 'Add New Customer';
+    document.querySelector('#addCustomerForm button[type="submit"]').textContent = 'Add Customer';
+    
     document.getElementById('addCustomerModal').classList.add('show');
 }
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
+    // Reset form when closing
+    if (modalId === 'addCustomerModal') {
+        document.getElementById('addCustomerForm').reset();
+        document.getElementById('addCustomerForm').removeAttribute('data-customer-id');
+    }
 }
 
 // Close modal when clicking outside
@@ -186,9 +242,22 @@ function displayCustomers(customers) {
             <td><span class="status-badge ${customer.status === 'active' ? 'active' : 'inactive'}">${customer.status || 'active'}</span></td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn btn-sm btn-view" onclick="viewCustomer(${customer.id})" title="View">👁️</button>
-                    <button class="btn btn-sm btn-edit" onclick="editCustomer(${customer.id})" title="Edit">✏️</button>
-                    <button class="btn btn-sm btn-delete" onclick="deleteCustomer(${customer.id})" title="Delete">🗑️</button>
+                    <button class="btn-icon btn-icon-view" onclick="viewCustomer(${customer.id})" title="View">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 2C4.5 2 1.5 4.5 0 8c1.5 3.5 4.5 6 8 6s6.5-2.5 8-6c-1.5-3.5-4.5-6-8-6zm0 10c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm0-6.5c-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5 2.5-1.1 2.5-2.5-1.1-2.5-2.5-2.5z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon btn-icon-edit" onclick="editCustomer(${customer.id})" title="Edit">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M12.854 1.146a.5.5 0 0 1 0 .708L11.707 3l-2-2 1.147-1.146a.5.5 0 0 1 .708 0l2 2zM11 4l-8 8H1v-2l8-8 2 2z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon btn-icon-delete" onclick="deleteCustomer(${customer.id})" title="Delete">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>
+                    </button>
                 </div>
             </td>
         `;
@@ -200,7 +269,7 @@ function displayCustomers(customers) {
 document.addEventListener('DOMContentLoaded', function() {
     loadCustomers();
     
-    // Handle add customer form submission
+    // Handle add/edit customer form submission
     const addCustomerForm = document.getElementById('addCustomerForm');
     if (addCustomerForm) {
         addCustomerForm.addEventListener('submit', function(e) {
@@ -208,11 +277,17 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const formData = new FormData(this);
             const customerData = Object.fromEntries(formData);
+            const customerId = this.getAttribute('data-customer-id');
             
-            console.log('Adding customer:', customerData);
+            // Determine if we're adding or editing
+            const isEditing = customerId !== null;
+            const url = isEditing 
+                ? `backend/admin/customers/update_customer.php?id=${customerId}`
+                : 'backend/admin/customers/add_customer.php';
             
-            // Simulate adding customer (replace with actual API call)
-            fetch('backend/admin/customers/add_customer.php', {
+            console.log(isEditing ? 'Updating customer:' : 'Adding customer:', customerData);
+            
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -221,26 +296,27 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Customer added:', data);
+                console.log(isEditing ? 'Customer updated:' : 'Customer added:', data);
                 
                 if (data.success) {
                     // Show success message
-                    alert(data.message || 'Customer added successfully!');
+                    alert(data.message || (isEditing ? 'Customer updated successfully!' : 'Customer added successfully!'));
                     
                     // Close modal and reset form
                     closeModal('addCustomerModal');
                     addCustomerForm.reset();
+                    addCustomerForm.removeAttribute('data-customer-id');
                     
                     // Reload customers list
                     loadCustomers();
                 } else {
                     // Show error message from server
-                    alert(data.message || 'Error adding customer. Please try again.');
+                    alert(data.message || `Error ${isEditing ? 'updating' : 'adding'} customer. Please try again.`);
                 }
             })
             .catch(error => {
-                console.error('Error adding customer:', error);
-                alert('Error adding customer. Please check your connection and try again.');
+                console.error(`Error ${isEditing ? 'updating' : 'adding'} customer:`, error);
+                alert(`Error ${isEditing ? 'updating' : 'adding'} customer. Please check your connection and try again.`);
             });
         });
     }
@@ -248,12 +324,73 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function viewCustomer(id) {
     console.log('View customer:', id);
-    // Implement view customer functionality
+    // Fetch customer details and show in a modal
+    fetch(`backend/admin/customers/get_customer.php?id=${id}`)
+        .then(response => response.json())
+        .then(customer => {
+            if (customer && !customer.error) {
+                // Populate modal with customer data
+                document.getElementById('viewCustomerId').textContent = customer.id || '-';
+                document.getElementById('viewCustomerName').textContent = customer.name || '-';
+                document.getElementById('viewCustomerPhone').textContent = customer.phone || '-';
+                document.getElementById('viewCustomerEmail').textContent = customer.email || 'N/A';
+                document.getElementById('viewCustomerAddress').textContent = customer.address || '-';
+                
+                // Format status with badge
+                const statusElement = document.getElementById('viewCustomerStatus');
+                const statusText = customer.status === 'active' ? 'Active' : 'Inactive';
+                statusElement.innerHTML = `<span class="status-badge ${customer.status === 'active' ? 'active' : 'inactive'}">${statusText}</span>`;
+                
+                // Format created date
+                const createdDate = customer.created_at ? new Date(customer.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }) : '-';
+                document.getElementById('viewCustomerCreated').textContent = createdDate;
+                
+                // Show modal
+                document.getElementById('viewCustomerModal').classList.add('show');
+            } else {
+                alert('Error: ' + (customer.message || 'Customer not found'));
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching customer:', error);
+            alert('Error loading customer details');
+        });
 }
 
 function editCustomer(id) {
     console.log('Edit customer:', id);
-    // Implement edit customer functionality
+    // Fetch customer details for editing
+    fetch(`backend/admin/customers/get_customer.php?id=${id}`)
+        .then(response => response.json())
+        .then(customer => {
+            if (customer) {
+                // Populate form with customer data
+                document.getElementById('customerName').value = customer.name;
+                document.getElementById('customerPhone').value = customer.phone;
+                document.getElementById('customerEmail').value = customer.email || '';
+                document.getElementById('customerAddress').value = customer.address;
+                
+                // Show modal
+                openAddCustomerModal();
+                
+                // Change modal title and button
+                document.querySelector('#addCustomerModal .modal-header h3').textContent = 'Edit Customer';
+                document.querySelector('#addCustomerForm button[type="submit"]').textContent = 'Update Customer';
+                
+                // Store customer ID for update
+                document.getElementById('addCustomerForm').setAttribute('data-customer-id', id);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching customer:', error);
+            alert('Error loading customer for editing');
+        });
 }
 
 function deleteCustomer(id) {
