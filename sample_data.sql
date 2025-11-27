@@ -1,5 +1,5 @@
 -- Sample data for Water Refilling Station Management System
-USE `water_refilling_db`;
+USE `if0_40320097_water_refilling_db`;
 
 -- Insert sample admin user
 INSERT INTO `admins` (`username`, `password`, `full_name`, `email`, `status`) VALUES

@@ -1,82 +1,153 @@
-/* Login page specific styles with Bootstrap */
+/* Login page - Minimalist & Chill Design */
 
-/* Custom gradient background */
+/* Soft gradient background */
 .login-wrapper {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #EDF2F7 0%, #E2E8F0 100%);
     min-height: 100vh;
 }
 
-/* Card enhancements */
+/* Clean card with subtle shadow */
 .login-wrapper .card {
     backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(226, 232, 240, 0.8);
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* Logo animation */
+/* Logo with soft shadow */
 .login-wrapper img {
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
     transition: transform 0.3s ease;
 }
 
 .login-wrapper img:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
-/* Form inputs custom styling */
+/* Minimalist form inputs */
 .login-wrapper .form-control {
-    border: 2px solid #e9ecef;
+    border: 1.5px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #4A5568;
     transition: all 0.3s ease;
+    font-size: 15px;
 }
 
 .login-wrapper .form-control:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.15);
+    border-color: #6B9BD1;
+    box-shadow: 0 0 0 3px rgba(107, 155, 209, 0.1);
+    background: #FFFFFF;
 }
 
-/* Button gradient */
+.login-wrapper .form-control::placeholder {
+    color: #A0AEC0;
+}
+
+/* Soft primary button */
 .login-wrapper .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #6B9BD1;
     border: none;
     transition: all 0.3s ease;
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 .login-wrapper .btn-primary:hover {
-    background: linear-gradient(135deg, #5568d3 0%, #663a8c 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    background: #5A8AC0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(107, 155, 209, 0.25);
 }
 
 .login-wrapper .btn-primary:active {
     transform: translateY(0);
 }
 
-/* Link styling */
+/* Soft link styling */
 .login-wrapper a {
-    color: #667eea;
+    color: #6B9BD1;
     transition: color 0.3s ease;
+    text-decoration: none;
 }
 
 .login-wrapper a:hover {
-    color: #764ba2;
+    color: #5A8AC0;
 }
 
-/* Alert custom styling */
+/* Subtle alert styling */
 .login-wrapper .alert {
-    border-radius: 12px;
+    border-radius: 8px;
     border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-/* Form label icons */
+.login-wrapper .alert-danger {
+    background: #FFF5F5;
+    color: #C53030;
+    border-left: 3px solid #FC8181;
+}
+
+/* Form label styling */
+.login-wrapper .form-label {
+    color: #4A5568;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
 .login-wrapper .form-label i {
-    color: #667eea;
+    color: #6B9BD1;
+}
+
+/* Typography improvements */
+.login-wrapper h2 {
+    color: #2D3748;
+    font-weight: 600;
+}
+
+.login-wrapper .text-muted {
+    color: #718096 !important;
+}
+
+.login-wrapper .text-white-50 {
+    color: #A0AEC0 !important;
+}
+
+/* Password toggle button - minimalist style */
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #6B9BD1;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+
+.password-toggle-btn:hover {
+    color: #5A8AC0;
+}
+
+.password-toggle-btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.password-toggle-btn:active {
+    transform: translateY(-50%) scale(0.95);
 }
 
 /* Fade in animation */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -88,11 +159,11 @@
     .login-wrapper .card-body {
         padding: 2rem !important;
     }
-    
+
     .login-wrapper h2 {
         font-size: 1.5rem;
     }
-    
+
     .login-wrapper img {
         width: 60px !important;
         height: 60px !important;

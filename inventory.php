@@ -65,12 +65,11 @@ include 'frontend/assets/includes/header.php';
                             <th>Minimum Stock</th>
                             <th>Unit Price</th>
                             <th>Status</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="8" class="text-center loading">
+                            <td colspan="7" class="text-center loading">
                                 <div class="spinner"></div>
                                 Loading inventory...
                             </td>
@@ -185,7 +184,7 @@ function loadInventory() {
             if (data.error) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                        <td colspan="7" class="text-center" style="color: #dc3545; padding: 40px;">
                             ${data.message}
                         </td>
                     </tr>
@@ -210,7 +209,7 @@ function loadInventory() {
             console.error('Error loading inventory:', error);
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                    <td colspan="7" class="text-center" style="color: #dc3545; padding: 40px;">
                         Error loading inventory. Please try again.
                     </td>
                 </tr>
@@ -224,7 +223,7 @@ function displayInventory(inventory) {
     if (inventory.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="text-center">No inventory items found. Click "Add Stock" to get started.</td>
+                <td colspan="7" class="text-center">No inventory items found. Click "Add Stock" to get started.</td>
             </tr>
         `;
         return;
@@ -242,14 +241,6 @@ function displayInventory(inventory) {
                 <span class="status-badge ${getStockStatusClass(item.stock_status)}">
                     ${formatStockStatus(item.stock_status)}
                 </span>
-            </td>
-            <td>
-                <button class="btn-action btn-edit" onclick="editInventoryItem(${item.id})" title="Edit">
-                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#edit"></use></svg>
-                </button>
-                <button class="btn-action btn-delete" onclick="deleteInventoryItem(${item.id})" title="Delete">
-                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#delete"></use></svg>
-                </button>
             </td>
         </tr>
     `).join('');

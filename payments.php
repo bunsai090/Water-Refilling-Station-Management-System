@@ -74,12 +74,11 @@ include 'frontend/assets/includes/header.php';
                                 <th>Payment Method</th>
                                 <th>Status</th>
                                 <th>Date</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td colspan="8" class="text-center loading">
+                                <td colspan="7" class="text-center loading">
                                     <div class="spinner"></div>
                                     Loading payments...
                                 </td>
@@ -246,7 +245,7 @@ function loadPayments() {
             if (data.error) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                        <td colspan="7" class="text-center" style="color: #dc3545; padding: 40px;">
                             ${data.message}
                         </td>
                     </tr>
@@ -270,7 +269,7 @@ function loadPayments() {
             console.error('Error loading payments:', error);
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="8" class="text-center" style="color: #dc3545; padding: 40px;">
+                    <td colspan="7" class="text-center" style="color: #dc3545; padding: 40px;">
                         Error loading payments. Please try again.
                     </td>
                 </tr>
@@ -284,7 +283,7 @@ function displayPayments(payments) {
     if (payments.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="text-center">No payment records found.</td>
+                <td colspan="7" class="text-center">No payment records found.</td>
             </tr>
         `;
         return;
@@ -303,20 +302,6 @@ function displayPayments(payments) {
                 </span>
             </td>
             <td>${formatDate(payment.created_at)}</td>
-            <td>
-                ${payment.status === 'pending' ? `
-                    <button class="btn-action btn-edit" onclick="verifyPayment(${payment.id})" title="Verify">
-                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#check"></use></svg>
-                    </button>
-                    <button class="btn-action btn-delete" onclick="rejectPayment(${payment.id})" title="Reject">
-                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#close"></use></svg>
-                    </button>
-                ` : `
-                    <button class="btn-action btn-view" onclick="viewPayment(${payment.id})" title="View">
-                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#view"></use></svg>
-                    </button>
-                `}
-            </td>
         </tr>
     `).join('');
 }

@@ -95,12 +95,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="password" class="form-label fw-semibold">
                                     <i class="bi bi-lock-fill me-1"></i> Password
                                 </label>
-                                <input type="password" 
-                                       class="form-control form-control-lg" 
-                                       id="password" 
-                                       name="password" 
-                                       placeholder="Enter your password"
-                                       required>
+                                <div class="position-relative">
+                                    <input type="password" 
+                                           class="form-control form-control-lg" 
+                                           id="password" 
+                                           name="password" 
+                                           placeholder="Enter your password"
+                                           required>
+                                    <button type="button" 
+                                            class="btn password-toggle-btn" 
+                                            onclick="togglePassword()"
+                                            aria-label="Toggle password visibility">
+                                        <i class="bi bi-eye" id="toggleIcon"></i>
+                                    </button>
+                                </div>
                                 <div class="invalid-feedback">Please enter your password.</div>
                             </div>
                             
@@ -128,5 +136,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('bi-eye');
+        toggleIcon.classList.add('bi-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('bi-eye-slash');
+        toggleIcon.classList.add('bi-eye');
+    }
+}
+</script>
 
 <?php include 'frontend/assets/includes/footer.php'; ?>

@@ -6,8 +6,8 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 -- Database: water_refilling_db
-CREATE DATABASE IF NOT EXISTS `water_refilling_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `water_refilling_db`;
+CREATE DATABASE IF NOT EXISTS `if0_40320097_water_refilling_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `if0_40320097_water_refilling_db`;
 
 -- Table structure for table `admins`
 CREATE TABLE `admins` (

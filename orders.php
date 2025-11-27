@@ -55,7 +55,6 @@ include 'frontend/assets/includes/header.php';
                                 <th>Total Amount</th>
                                 <th>Status</th>
                                 <th>Order Date</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -374,19 +373,6 @@ function displayOrders(orders) {
                 </span>
             </td>
             <td>${formatDate(order.created_at)}</td>
-            <td>
-                <button class="btn-action btn-view" onclick="viewOrder(${order.id})" title="View">
-                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#view"></use></svg>
-                </button>
-                <button class="btn-action btn-edit" onclick="editOrder(${order.id})" title="Edit">
-                    <svg class="icon"><use href="frontend/assets/svg/icons.svg#edit"></use></svg>
-                </button>
-                ${order.status === 'pending' ? `
-                    <button class="btn-action btn-delete" onclick="cancelOrder(${order.id})" title="Cancel">
-                        <svg class="icon"><use href="frontend/assets/svg/icons.svg#close"></use></svg>
-                    </button>
-                ` : ''}
-            </td>
         </tr>
     `).join('');
 }

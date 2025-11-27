@@ -1,4 +1,4 @@
-<?php
+    <?php
 require_once 'backend/config/auth_check.php';
 require_once 'backend/config/db.php';
 
@@ -135,6 +135,40 @@ include 'frontend/assets/includes/header.php';
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal('viewCustomerModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Customer Confirmation Modal -->
+<div id="deleteCustomerModal" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+            <h3>Delete Customer</h3>
+            <button class="modal-close" onclick="closeModal('deleteCustomerModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="text-align: center; padding: 20px 0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#FC8181" viewBox="0 0 16 16" style="margin-bottom: 20px;">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                <h4 style="color: #4A5568; margin-bottom: 10px; font-weight: 600;">Are you sure?</h4>
+                <p style="color: #718096; margin: 0; line-height: 1.6;">
+                    Do you really want to delete this customer? <br>
+                    <strong id="deleteCustomerName" style="color: #4A5568;"></strong><br>
+                    <small style="color: #A0AEC0;">This action cannot be undone.</small>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('deleteCustomerModal')">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn" style="background: #FC8181; border-color: #FC8181;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 6px; vertical-align: middle;">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+                Delete Customer
+            </button>
         </div>
     </div>
 </div>
@@ -394,22 +428,47 @@ function editCustomer(id) {
 }
 
 function deleteCustomer(id) {
-    if (confirm('Are you sure you want to delete this customer?')) {
-        console.log('Delete customer:', id);
-        // Implement delete customer functionality
-        fetch(`backend/admin/customers/delete_customer.php?id=${id}`, {
-            method: 'DELETE'
-        })
+    // First, fetch customer details to show name in modal
+    fetch(`backend/admin/customers/get_customer.php?id=${id}`)
         .then(response => response.json())
-        .then(data => {
-            alert('Customer deleted successfully!');
-            loadCustomers();
+        .then(customer => {
+            if (customer && !customer.error) {
+                // Show customer name in modal
+                document.getElementById('deleteCustomerName').textContent = customer.name || 'Customer #' + id;
+                
+                // Show modal
+                document.getElementById('deleteCustomerModal').classList.add('show');
+                
+                // Set up confirm button click handler
+                const confirmBtn = document.getElementById('confirmDeleteBtn');
+                confirmBtn.onclick = function() {
+                    // Close modal first
+                    closeModal('deleteCustomerModal');
+                    
+                    // Proceed with delete
+                    fetch(`backend/admin/customers/delete_customer.php?id=${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message || 'Customer deleted successfully!');
+                            loadCustomers();
+                        } else {
+                            alert(data.message || 'Error deleting customer. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting customer:', error);
+                        alert('Error deleting customer. Please try again.');
+                    });
+                };
+            } else {
+                alert('Error: Customer not found');
+            }
         })
         .catch(error => {
-            console.error('Error deleting customer:', error);
-            alert('Error deleting customer. Please try again.');
+            console.error('Error fetching customer:', error);
+            alert('Error loading customer details');
         });
-    }
 }
 </script>
 

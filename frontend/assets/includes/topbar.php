@@ -15,7 +15,7 @@
                         <a href="profile.php">Profile</a>
                         <a href="settings.php">Settings</a>
                         <hr>
-                        <a href="logout.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
+                        <a href="#" onclick="handleLogout(); return false;">Logout</a>
                     </div>
                 </div>
             </div>
