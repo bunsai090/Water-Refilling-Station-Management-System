@@ -235,7 +235,34 @@ function updateProductSelects() {
         select.innerHTML = '<option value="">Select Product</option>';
         if (window.productsData && window.productsData.length > 0) {
             window.productsData.forEach(product => {
-                select.innerHTML += `<option value="${product.id}" data-price="${product.unit_price}">${product.name} - ₱${product.unit_price}</option>`;
+                // Determine stock indicator
+                let stockIndicator = '';
+                let optionStyle = '';
+                let disabled = '';
+                
+                if (product.stock_status === 'out_of_stock') {
+                    stockIndicator = '❌ OUT OF STOCK';
+                    optionStyle = 'color: #FC8181;';
+                    disabled = 'disabled';
+                } else if (product.stock_status === 'low_stock') {
+                    stockIndicator = `⚠️ Low Stock (${product.current_stock})`;
+                    optionStyle = 'color: #F6AD55;';
+                } else {
+                    stockIndicator = `✓ In Stock (${product.current_stock})`;
+                    optionStyle = 'color: #68D391;';
+                }
+                
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.setAttribute('data-price', product.unit_price);
+                option.setAttribute('data-stock', product.current_stock);
+                option.setAttribute('data-stock-status', product.stock_status);
+                option.textContent = `${product.name} - ₱${product.unit_price} ${stockIndicator}`;
+                option.style.cssText = optionStyle;
+                if (disabled) {
+                    option.disabled = true;
+                }
+                select.appendChild(option);
             });
         }
         select.value = currentValue;
@@ -287,6 +314,18 @@ function updateItemPrice(selectElement) {
     const priceInput = row.querySelector('.price-input');
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const price = selectedOption.getAttribute('data-price') || 0;
+    const stockStatus = selectedOption.getAttribute('data-stock-status');
+    const currentStock = selectedOption.getAttribute('data-stock');
+    
+    // Check stock status and show warning
+    if (stockStatus === 'out_of_stock') {
+        alert('⚠️ Warning: This product is OUT OF STOCK!\n\nCannot create order for this item.');
+        selectElement.value = ''; // Clear selection
+        priceInput.value = '';
+        return;
+    } else if (stockStatus === 'low_stock') {
+        alert(`⚠️ Warning: This product has LOW STOCK!\n\nOnly ${currentStock} units available.`);
+    }
     
     priceInput.value = parseFloat(price).toFixed(2);
     updateItemTotal(row.querySelector('.quantity-input'));
