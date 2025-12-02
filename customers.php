@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.success) {
                     // Show success message
-                    alert(data.message || (isEditing ? 'Customer updated successfully!' : 'Customer added successfully!'));
+                    showSuccessModal(data.message || (isEditing ? 'Customer updated successfully!' : 'Customer added successfully!'));
                     
                     // Close modal and reset form
                     closeModal('addCustomerModal');

@@ -159,7 +159,32 @@ include 'frontend/assets/includes/header.php';
     </div>
 </div>
 
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div class="modal-body" style="padding: 30px;">
+            <div style="margin-bottom: 20px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#68D391" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+            </div>
+            <h3 style="color: #2D3748; margin-bottom: 10px;">Success!</h3>
+            <p id="successMessage" style="color: #718096; margin-bottom: 20px;">Operation completed successfully.</p>
+            <button class="btn btn-primary" onclick="closeModal('successModal')">OK</button>
+        </div>
+    </div>
+</div>
+
 <script>
+function showSuccessModal(message) {
+    const modal = document.getElementById('successModal');
+    const messageElement = document.getElementById('successMessage');
+    if (modal && messageElement) {
+        messageElement.textContent = message;
+        modal.classList.add('show');
+    }
+}
+
 function openRecordPaymentModal() {
     document.getElementById('recordPaymentModal').classList.add('show');
     loadPendingOrders();
@@ -180,14 +205,24 @@ function loadPendingOrders() {
     fetch('backend/admin/orders/get_orders.php?status=pending')
         .then(response => response.json())
         .then(data => {
+            // Handle error response
+            if (data.error) {
+                console.error('Error loading orders:', data.message);
+                alert('Error loading pending orders: ' + data.message);
+                return;
+            }
+            
             const select = document.getElementById('paymentOrder');
             select.innerHTML = '<option value="">Select Order</option>';
             
-            // Store order data for auto-filling amount
-            window.pendingOrders = {};
+            // Check if data is array
+            if (!Array.isArray(data) || data.length === 0) {
+                select.innerHTML += '<option value="" disabled>No pending orders available</option>';
+                return;
+            }
             
+            // Populate dropdown with pending orders
             data.forEach(order => {
-                window.pendingOrders[order.id] = order.total_amount;
                 select.innerHTML += `<option value="${order.id}" data-amount="${order.total_amount}">${order.order_id} - ${order.customer_name} (₱${parseFloat(order.total_amount).toFixed(2)})</option>`;
             });
             
@@ -202,6 +237,7 @@ function loadPendingOrders() {
         })
         .catch(error => {
             console.error('Error loading pending orders:', error);
+            alert('Failed to load pending orders. Please try again.');
         });
 }
 
@@ -375,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    alert('Payment recorded successfully!');
+                    showSuccessModal('Payment recorded successfully!');
                     closeModal('recordPaymentModal');
                     recordPaymentForm.reset();
                     loadPayments(); // Reload payment list

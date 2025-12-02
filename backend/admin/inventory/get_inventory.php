@@ -21,8 +21,8 @@ try {
             COALESCE(i.current_stock, 0) as current_stock,
             COALESCE(i.minimum_stock, 10) as minimum_stock,
             CASE 
-                WHEN COALESCE(i.current_stock, 0) = 0 THEN 'out_of_stock'
-                WHEN COALESCE(i.current_stock, 0) > 0 AND COALESCE(i.current_stock, 0) < COALESCE(i.minimum_stock, 10) THEN 'low_stock'
+                WHEN COALESCE(i.current_stock, 0) <= 0 THEN 'out_of_stock'
+                WHEN COALESCE(i.current_stock, 0) < COALESCE(i.minimum_stock, 10) THEN 'low_stock'
                 ELSE 'in_stock'
             END as stock_status,
             p.created_at
