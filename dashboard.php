@@ -51,6 +51,33 @@ include 'frontend/assets/includes/header.php';
                 <canvas id="inventoryChart"></canvas>
             </div>
             
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Product Stock Levels</h3>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="stockLevelsTable">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Current Stock</th>
+                                <th>Minimum Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center loading">
+                                    <div class="spinner"></div>
+                                    Loading stock levels...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
             <div class="chart-container">
                 <h3>Recent Activities</h3>
                 <div class="activity-list" id="recent-activities">
