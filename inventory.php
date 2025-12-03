@@ -116,6 +116,22 @@ include 'frontend/assets/includes/header.php';
     </div>
 </div>
 
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div class="modal-body" style="padding: 30px;">
+            <div style="margin-bottom: 20px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#68D391" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+            </div>
+            <h3 style="color: #2D3748; margin-bottom: 10px;">Success!</h3>
+            <p id="successMessage" style="color: #718096; margin-bottom: 20px;">Operation completed successfully.</p>
+            <button class="btn btn-primary" onclick="closeModal('successModal')">OK</button>
+        </div>
+    </div>
+</div>
+
 <script>
 function openAddStockModal() {
     document.getElementById('addStockModal').classList.add('show');
@@ -124,6 +140,15 @@ function openAddStockModal() {
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
+}
+
+function showSuccessModal(message) {
+    const modal = document.getElementById('successModal');
+    const messageElement = document.getElementById('successMessage');
+    if (modal && messageElement) {
+        messageElement.textContent = message;
+        modal.classList.add('show');
+    }
 }
 
 // Close modal when clicking outside
@@ -317,7 +342,8 @@ document.getElementById('addStockForm').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            alert(`Stock added successfully!\n${result.product_name}: ${result.new_stock} units in stock`);
+            // Show success modal instead of alert
+            showSuccessModal(`Stock added successfully!\n${result.product_name}: ${result.new_stock} units in stock`);
             closeModal('addStockModal');
             document.getElementById('addStockForm').reset();
             loadInventory(); // Reload inventory table
