@@ -31,7 +31,7 @@ function toggleUserDropdown() {
 
 // Close dropdown when clicking outside
 window.onclick = function(event) {
-    if (!event.target.matches('.dropdown-toggle')) {
+    if (!event.target.closest('.dropdown-toggle')) {
         const dropdowns = document.getElementsByClassName('dropdown-menu');
         for (let i = 0; i < dropdowns.length; i++) {
             const openDropdown = dropdowns[i];
