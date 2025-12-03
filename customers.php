@@ -74,12 +74,12 @@ include 'frontend/assets/includes/header.php';
                     </div>
                     <div class="form-group">
                         <label for="customerPhone">Phone Number</label>
-                        <input type="tel" id="customerPhone" name="phone" required>
+                        <input type="tel" id="customerPhone" name="phone" required pattern="[0-9]{11}" maxlength="11" placeholder="09123456789" title="Please enter exactly 11 digits">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="customerEmail">Email Address</label>
-                    <input type="email" id="customerEmail" name="email">
+                    <input type="email" id="customerEmail" name="email" required>
                 </div>
                 <div class="form-group">
                     <label for="customerAddress">Address</label>
@@ -319,11 +319,47 @@ function displayCustomers(customers) {
 document.addEventListener('DOMContentLoaded', function() {
     loadCustomers();
     
+    // Add phone number input validation
+    const phoneInput = document.getElementById('customerPhone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            // Remove any non-numeric characters
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Limit to 11 digits
+            if (this.value.length > 11) {
+                this.value = this.value.slice(0, 11);
+            }
+        });
+        
+        // Additional validation on blur
+        phoneInput.addEventListener('blur', function(e) {
+            if (this.value.length > 0 && this.value.length !== 11) {
+                this.setCustomValidity('Phone number must be exactly 11 digits');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+    
     // Handle add/edit customer form submission
     const addCustomerForm = document.getElementById('addCustomerForm');
     if (addCustomerForm) {
         addCustomerForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Validate phone number one more time before submission
+            const phone = document.getElementById('customerPhone').value;
+            if (phone.length !== 11) {
+                alert('Phone number must be exactly 11 digits');
+                return;
+            }
+            
+            if (!/^[0-9]{11}$/.test(phone)) {
+                alert('Phone number must contain only numbers');
+                return;
+            }
             
             const formData = new FormData(this);
             const customerData = Object.fromEntries(formData);
