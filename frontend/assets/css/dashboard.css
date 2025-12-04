@@ -6,7 +6,7 @@
     background-color: #F7F9FC;
 }
 
-/* Sidebar Styles - Light & Minimal */
+/* Sidebar Styles - Modern Blue Theme */
 .sidebar {
     width: 260px;
     background: #FFFFFF;
@@ -17,6 +17,7 @@
     height: 100vh;
     overflow-y: auto;
     border-right: 1px solid #E2E8F0;
+    z-index: 100;
 }
 
 .sidebar-header {
@@ -25,65 +26,84 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    background: #FFFFFF;
 }
 
 .sidebar-header img {
     filter: none;
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .sidebar-header h3 {
     margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #2D3748;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #4e73df;
+    /* Primary Brand Color */
+    letter-spacing: -0.5px;
 }
 
 .sidebar-menu {
     list-style: none;
-    padding: 16px 0;
+    padding: 16px 10px;
     margin: 0;
 }
 
 .sidebar-menu li {
-    margin: 0;
+    margin-bottom: 4px;
 }
 
 .sidebar-menu a {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 20px;
+    padding: 12px 16px;
     color: #718096;
     text-decoration: none;
     transition: all 0.2s ease;
-    border-left: 3px solid transparent;
+    border-radius: 8px;
     font-weight: 500;
     font-size: 0.95rem;
+    position: relative;
 }
 
 .sidebar-menu a:hover {
-    background-color: #F7FAFC;
-    color: #4A5568;
-    border-left-color: #6B9BD1;
+    background-color: #f8f9fc;
+    color: #4e73df;
 }
 
 .sidebar-menu a.active {
-    background-color: #EDF6FF;
-    border-left-color: #6B9BD1;
-    color: #6B9BD1;
+    background: linear-gradient(90deg, rgba(78, 115, 223, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    color: #4e73df;
+    font-weight: 600;
+}
+
+.sidebar-menu a.active::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 20px;
+    width: 4px;
+    background-color: #4e73df;
+    border-radius: 0 4px 4px 0;
 }
 
 .sidebar-menu .icon {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-    flex-shrink: 0;
-    opacity: 0.8;
+    font-size: 1.1rem;
+    color: #a0aec0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
 }
 
+.sidebar-menu a:hover .icon,
 .sidebar-menu a.active .icon {
-    opacity: 1;
+    color: #4e73df;
 }
 
 /* Main Content */

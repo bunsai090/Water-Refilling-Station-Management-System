@@ -6,6 +6,7 @@
     <title><?php echo isset($page_title) ? $page_title . ' - ' : ''; ?>Water Refilling Station Management</title>
     
     <!-- CSS Files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="frontend/assets/css/main.css">
     <?php if(isset($additional_css)): ?>
         <?php foreach($additional_css as $css): ?>

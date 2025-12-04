@@ -7,43 +7,43 @@
     <ul class="sidebar-menu">
         <li>
             <a href="dashboard.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#dashboard"></use></svg>
+                <i class="bi bi-grid-1x2-fill icon"></i>
                 Dashboard
             </a>
         </li>
         <li>
             <a href="customers.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'customers.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#users"></use></svg>
+                <i class="bi bi-people-fill icon"></i>
                 Customers
             </a>
         </li>
         <li>
             <a href="orders.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'orders.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#orders"></use></svg>
+                <i class="bi bi-cart-fill icon"></i>
                 Orders
             </a>
         </li>
         <li>
             <a href="inventory.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'inventory.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#inventory"></use></svg>
+                <i class="bi bi-box-seam-fill icon"></i>
                 Inventory
             </a>
         </li>
         <li>
             <a href="payments.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'payments.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#payments"></use></svg>
+                <i class="bi bi-credit-card-fill icon"></i>
                 Payments
             </a>
         </li>
         <li>
             <a href="reports.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#reports"></use></svg>
+                <i class="bi bi-bar-chart-fill icon"></i>
                 Reports
             </a>
         </li>
         <li>
             <a href="backup.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'backup.php' ? 'active' : ''; ?>">
-                <svg class="icon"><use href="frontend/assets/svg/icons.svg#settings"></use></svg>
+                <i class="bi bi-database-fill icon"></i>
                 Backup
             </a>
         </li>
