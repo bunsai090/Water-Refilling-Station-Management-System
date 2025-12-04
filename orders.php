@@ -13,24 +13,13 @@ include 'frontend/assets/includes/header.php';
     <div class="main-content">
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
-        <div class="page-actions">
-            <div>
-                <button class="btn btn-primary" onclick="openCreateOrderModal()">
-                    <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#orders"></use></svg>
-                    Create New Order
-                </button>
-                <button class="btn btn-secondary" onclick="refreshOrders()">
-                    <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#dashboard"></use></svg>
-                    Refresh
-                </button>
-            </div>
-        </div>
+
         
         <div class="dashboard-content">
             <div class="card">
                 <div class="card-header">
                     <h3>Orders List</h3>
-                    <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                         <select id="statusFilter" onchange="filterOrders()" class="form-control" style="min-width: 150px; padding: 10px; border: 1px solid #dee2e6; border-radius: 8px; background: white;">
                             <option value="">All Status</option>
                             <option value="pending">Pending</option>
@@ -40,6 +29,16 @@ include 'frontend/assets/includes/header.php';
                         </select>
                         <div class="search-box">
                             <input type="text" id="orderSearch" placeholder="Search orders..." onkeyup="searchOrders()">
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="openCreateOrderModal()">
+                                <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#orders"></use></svg>
+                                Create New Order
+                            </button>
+                            <button class="btn btn-secondary" onclick="refreshOrders()">
+                                <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#dashboard"></use></svg>
+                                Refresh
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -13,18 +13,7 @@ include 'frontend/assets/includes/header.php';
     <div class="main-content">
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
-        <div class="page-actions">
-            <div>
-                <button class="btn btn-primary" onclick="openAddStockModal()" id="addStockBtn">
-                    <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#inventory"></use></svg>
-                    Add Stock
-                </button>
-                <button class="btn btn-secondary" onclick="generateInventoryReport()">
-                    <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#reports"></use></svg>
-                    Generate Report
-                </button>
-            </div>
-        </div>
+
         
         <div class="dashboard-content">
             <div class="dashboard-stats">
@@ -48,8 +37,20 @@ include 'frontend/assets/includes/header.php';
         <div class="card">
             <div class="card-header">
                 <h3>Inventory Items</h3>
-                <div class="search-box">
-                    <input type="text" id="inventorySearch" placeholder="Search items..." onkeyup="searchInventory()">
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div class="search-box">
+                        <input type="text" id="inventorySearch" placeholder="Search items..." onkeyup="searchInventory()">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="openAddStockModal()" id="addStockBtn">
+                            <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#inventory"></use></svg>
+                            Add Stock
+                        </button>
+                        <button class="btn btn-secondary" onclick="generateInventoryReport()">
+                            <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#reports"></use></svg>
+                            Generate Report
+                        </button>
+                    </div>
                 </div>
             </div>
             

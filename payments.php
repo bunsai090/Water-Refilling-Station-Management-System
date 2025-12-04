@@ -13,18 +13,7 @@ include 'frontend/assets/includes/header.php';
     <div class="main-content">
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
-        <div class="page-actions">
-            <div>
-                <button class="btn btn-primary" onclick="openRecordPaymentModal()">
-                    <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#payments"></use></svg>
-                    Record Payment
-                </button>
-                <button class="btn btn-secondary" onclick="exportPayments()">
-                    <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#reports"></use></svg>
-                    Export Payments
-                </button>
-            </div>
-        </div>
+
         
         <div class="dashboard-content">
             <div class="dashboard-stats">
@@ -48,7 +37,7 @@ include 'frontend/assets/includes/header.php';
         <div class="card">
                 <div class="card-header">
                     <h3>Payment Records</h3>
-                    <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                         <select id="paymentStatusFilter" onchange="filterPayments()" class="form-control" style="min-width: 150px;">
                             <option value="">All Status</option>
                             <option value="verified">Verified</option>
@@ -58,6 +47,16 @@ include 'frontend/assets/includes/header.php';
                         <input type="date" id="paymentDateFilter" onchange="filterPayments()" class="form-control">
                         <div class="search-box">
                             <input type="text" id="paymentSearch" placeholder="Search payments..." onkeyup="searchPayments()">
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="openRecordPaymentModal()">
+                                <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#payments"></use></svg>
+                                Record Payment
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportPayments()">
+                                <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#reports"></use></svg>
+                                Export Payments
+                            </button>
                         </div>
                     </div>
                 </div>
