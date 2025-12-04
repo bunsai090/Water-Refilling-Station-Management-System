@@ -13,19 +13,20 @@ include 'frontend/assets/includes/header.php';
     <div class="main-content">
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
-        <div class="page-actions">
-            <button class="btn btn-primary" onclick="openAddCustomerModal()">
-                <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#users"></use></svg>
-                Add New Customer
-            </button>
-        </div>
+
         
         <div class="dashboard-content">
             <div class="card">
                 <div class="card-header">
                     <h3>Customer List</h3>
-                    <div class="search-box">
-                        <input type="text" id="customerSearch" placeholder="Search customers..." onkeyup="searchCustomers()">
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <div class="search-box">
+                            <input type="text" id="customerSearch" placeholder="Search customers..." onkeyup="searchCustomers()">
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddCustomerModal()">
+                            <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#users"></use></svg>
+                            Add New Customer
+                        </button>
                     </div>
                 </div>
                 
