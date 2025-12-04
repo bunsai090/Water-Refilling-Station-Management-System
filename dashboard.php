@@ -41,47 +41,60 @@ include 'frontend/assets/includes/header.php';
                 </div>
             </div>
             
-            <div class="chart-container">
-                <h3>Sales Overview</h3>
-                <canvas id="salesChart"></canvas>
-            </div>
-            
-            <div class="chart-container">
-                <h3>Inventory Status</h3>
-                <canvas id="inventoryChart"></canvas>
-            </div>
-            
-            
-            <div class="card">
-                <div class="card-header">
-                    <h3>Product Stock Levels</h3>
+            <div class="dashboard-grid">
+                <!-- Row 1: Sales Chart (8 cols) & Recent Activities (4 cols) -->
+                <div class="grid-col-span-8">
+                    <div class="chart-container" style="height: 100%; margin-bottom: 0;">
+                        <h3>Sales Overview</h3>
+                        <canvas id="salesChart"></canvas>
+                    </div>
                 </div>
-                <div class="table-container">
-                    <table class="data-table" id="stockLevelsTable">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Current Stock</th>
-                                <th>Minimum Stock</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="4" class="text-center loading">
-                                    <div class="spinner"></div>
-                                    Loading stock levels...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                
+                <div class="grid-col-span-4">
+                    <div class="chart-container" style="height: 100%; margin-bottom: 0;">
+                        <h3>Recent Activities</h3>
+                        <div class="activity-list" id="recent-activities">
+                            <p>Loading recent activities...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="chart-container">
-                <h3>Recent Activities</h3>
-                <div class="activity-list" id="recent-activities">
-                    <p>Loading recent activities...</p>
+            <div class="dashboard-grid">
+                <!-- Row 2: Inventory Chart (4 cols) & Stock Table (8 cols) -->
+                <div class="grid-col-span-4">
+                    <div class="chart-container" style="height: 100%; margin-bottom: 0;">
+                        <h3>Inventory Status</h3>
+                        <canvas id="inventoryChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="grid-col-span-8">
+                    <div class="card" style="height: 100%; margin-bottom: 0;">
+                        <div class="card-header">
+                            <h3>Product Stock Levels</h3>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table" id="stockLevelsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Current Stock</th>
+                                        <th>Minimum Stock</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-center loading">
+                                            <div class="spinner"></div>
+                                            Loading stock levels...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
