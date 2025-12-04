@@ -13,9 +13,6 @@ include 'frontend/assets/includes/header.php';
     <div class="main-content">
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
-        <div class="page-actions">
-            <h2>Database Backup & Restore</h2>
-        </div>
         
         <div class="dashboard-content">
             <div class="card">

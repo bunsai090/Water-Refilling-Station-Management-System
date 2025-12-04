@@ -14,7 +14,6 @@ include 'frontend/assets/includes/header.php';
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
         <div class="page-actions">
-            <h2>Inventory Management</h2>
             <div>
                 <button class="btn btn-primary" onclick="openAddStockModal()" id="addStockBtn">
                     <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#inventory"></use></svg>

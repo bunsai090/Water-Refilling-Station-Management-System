@@ -14,7 +14,6 @@ include 'frontend/assets/includes/header.php';
         <?php include 'frontend/assets/includes/topbar.php'; ?>
         
         <div class="page-actions">
-            <h2>Customer Management</h2>
             <button class="btn btn-primary" onclick="openAddCustomerModal()">
                 <svg class="icon" style="width: 16px; height: 16px; margin-right: 8px;"><use href="frontend/assets/svg/icons.svg#users"></use></svg>
                 Add New Customer
