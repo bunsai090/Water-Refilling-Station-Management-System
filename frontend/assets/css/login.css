@@ -169,3 +169,7 @@
         height: 60px !important;
     }
 }
+/* Hide global footer on login page */
+.footer {
+    display: none !important;
+}
