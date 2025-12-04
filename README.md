@@ -22,7 +22,7 @@ Here's what you can do with this system:
 
 Built with love using:
 
-*   � **PHP** (Native)
+*   🐘 **PHP** (Native)
 *   🐬 **MySQL** (Database)
 *   🎨 **HTML5 & CSS3** (Custom "Minimalist & Chill" Design)
 *   ⚡ **JavaScript**
@@ -57,6 +57,24 @@ Use this account to log in for the first time:
 ## 🎨 Design
 
 We used a **"Minimalist & Chill"** design style. It's clean, blue, and easy on the eyes! 💙
+
+---
+
+## 📸 Screenshots
+
+Here's a sneak peek of the system:
+
+### 🖥️ Dashboard
+![Dashboard Preview](frontend/assets/screenshots/dashboard_preview.png)
+
+### 🔐 Login Page
+![Login Preview](frontend/assets/screenshots/login_preview.png)
+
+---
+
+## 🎞️ Demo (GIFs)
+
+*Coming soon! Watch this space for animated demos of the system in action.*
 
 ---
 
