@@ -159,29 +159,6 @@ body {
     font-weight: 600;
 }
 
-.feature-card p {
-    color: #718096;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-/* Footer */
-.footer {
-    background: #2D3748;
-    color: white;
-    text-align: center;
-    padding: 24px 0;
-    margin-top: 50px;
-}
-
-.footer p {
-    margin: 0;
-    opacity: 0.8;
-}
-
-/* Common UI Components - Minimalist Style */
-
-/* Page Actions */
 .page-actions {
     padding: 20px 30px;
     background: white;
@@ -868,4 +845,26 @@ body {
 
 .summary-label {
     color: #4A5568;
+}
+/* Footer */
+.footer {
+    background: #F7F9FC;
+    color: #718096;
+    text-align: center;
+    padding: 24px 0;
+    margin-top: 30px;
+    margin-left: 260px;
+    border-top: 1px solid #E2E8F0;
+}
+
+.footer p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        margin-left: 0;
+    }
 }
