@@ -69,9 +69,9 @@ function updateSalesChart(salesData) {
         return;
     }
 
-    // Extract labels and values
-    const labels = salesData && salesData.length > 0 ? salesData.map(item => item.month) : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    const values = salesData && salesData.length > 0 ? salesData.map(item => parseFloat(item.total)) : [0, 0, 0, 0, 0, 0];
+    // Extract labels and values - now using daily data
+    const labels = salesData && salesData.length > 0 ? salesData.map(item => item.day) : ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
+    const values = salesData && salesData.length > 0 ? salesData.map(item => parseFloat(item.total)) : [0, 0, 0, 0, 0, 0, 0];
 
     console.log('Chart labels:', labels);
     console.log('Chart values:', values);
@@ -81,23 +81,20 @@ function updateSalesChart(salesData) {
         salesChart.destroy();
     }
 
-    // Create new chart
+    // Create new bar chart
     try {
         salesChart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
                     label: 'Sales (₱)',
                     data: values,
+                    backgroundColor: 'rgba(0, 123, 255, 0.7)',
                     borderColor: '#007bff',
-                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: '#007bff',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    hoverBackgroundColor: 'rgba(0, 123, 255, 0.9)'
                 }]
             },
             options: {
@@ -107,6 +104,13 @@ function updateSalesChart(salesData) {
                     legend: {
                         display: true,
                         position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return 'Sales: ₱' + context.parsed.y.toLocaleString();
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -116,6 +120,11 @@ function updateSalesChart(salesData) {
                             callback: function (value) {
                                 return '₱' + value.toLocaleString();
                             }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
                         }
                     }
                 }

@@ -37,16 +37,16 @@ try {
     ");
     $stats['low_stock_items'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
     
-    // Sales data for chart (last 6 months)
+    // Sales data for chart (last 7 days)
     $salesData = [];
     $salesStmt = $pdo->query("
         SELECT 
-            DATE_FORMAT(p.created_at, '%b') as month,
+            DATE_FORMAT(p.created_at, '%b %d') as day,
             COALESCE(SUM(p.amount), 0) as total
         FROM payments p
-        WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
         AND p.status = 'verified'
-        GROUP BY YEAR(p.created_at), MONTH(p.created_at)
+        GROUP BY DATE(p.created_at)
         ORDER BY p.created_at ASC
     ");
     $salesData = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
