@@ -14,12 +14,22 @@ document.addEventListener('DOMContentLoaded', function () {
     loadDashboardStats();
     loadStockLevels();
     setupRealTimeUpdates();
+
+    // Add event listener for sales period filter
+    const periodFilter = document.getElementById('salesPeriodFilter');
+    if (periodFilter) {
+        periodFilter.addEventListener('change', function () {
+            const period = this.value;
+            console.log('Period filter changed to:', period);
+            loadDashboardStats(period);
+        });
+    }
 });
 
-function loadDashboardStats() {
-    console.log('Fetching dashboard stats from API...');
+function loadDashboardStats(period = 7) {
+    console.log('Fetching dashboard stats from API with period:', period);
 
-    fetch('backend/admin/dashboard/get_stats.php')
+    fetch(`backend/admin/dashboard/get_stats.php?period=${period}`)
         .then(response => {
             console.log('API Response status:', response.status);
             if (!response.ok) {
@@ -69,9 +79,9 @@ function updateSalesChart(salesData) {
         return;
     }
 
-    // Extract labels and values - now using daily data
-    const labels = salesData && salesData.length > 0 ? salesData.map(item => item.day) : ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
-    const values = salesData && salesData.length > 0 ? salesData.map(item => parseFloat(item.total)) : [0, 0, 0, 0, 0, 0, 0];
+    // Extract labels and values - using period_label for flexibility
+    const labels = salesData && salesData.length > 0 ? salesData.map(item => item.period_label) : ['No Data'];
+    const values = salesData && salesData.length > 0 ? salesData.map(item => parseFloat(item.total)) : [0];
 
     console.log('Chart labels:', labels);
     console.log('Chart values:', values);

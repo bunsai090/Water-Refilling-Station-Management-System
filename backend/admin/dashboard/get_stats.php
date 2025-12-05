@@ -37,18 +37,30 @@ try {
     ");
     $stats['low_stock_items'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
     
-    // Sales data for chart (last 7 days)
+    // Get period from request (default to 7 days)
+    $period = isset($_GET['period']) ? intval($_GET['period']) : 7;
+    
+    // Determine date format based on period
+    // For 7 and 30 days, show day format (e.g., "Dec 05")
+    // For 90 and 180 days, show month format (e.g., "Dec")
+    $dateFormat = ($period <= 30) ? '%b %d' : '%b %Y';
+    $groupBy = ($period <= 30) ? 'DATE(p.created_at)' : 'YEAR(p.created_at), MONTH(p.created_at)';
+    
+    // Sales data for chart
     $salesData = [];
-    $salesStmt = $pdo->query("
+    $salesStmt = $pdo->prepare("
         SELECT 
-            DATE_FORMAT(p.created_at, '%b %d') as day,
+            DATE_FORMAT(p.created_at, :dateFormat) as period_label,
             COALESCE(SUM(p.amount), 0) as total
         FROM payments p
-        WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        WHERE p.created_at >= DATE_SUB(CURDATE(), INTERVAL :period DAY)
         AND p.status = 'verified'
-        GROUP BY DATE(p.created_at)
+        GROUP BY $groupBy
         ORDER BY p.created_at ASC
     ");
+    $salesStmt->bindParam(':dateFormat', $dateFormat, PDO::PARAM_STR);
+    $salesStmt->bindParam(':period', $period, PDO::PARAM_INT);
+    $salesStmt->execute();
     $salesData = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Inventory status for chart

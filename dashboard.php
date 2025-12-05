@@ -45,7 +45,15 @@ include 'frontend/assets/includes/header.php';
                 <!-- Row 1: Sales Chart (8 cols) & Recent Activities (4 cols) -->
                 <div class="grid-col-span-8">
                     <div class="chart-container" style="height: 100%; margin-bottom: 0;">
-                        <h3>Sales Overview</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="margin: 0;">Sales Overview</h3>
+                            <select id="salesPeriodFilter" class="form-control" style="width: auto; padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd;">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="90">Last 3 Months</option>
+                                <option value="180">Last 6 Months</option>
+                            </select>
+                        </div>
                         <canvas id="salesChart"></canvas>
                     </div>
                 </div>
