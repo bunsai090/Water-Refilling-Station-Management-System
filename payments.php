@@ -246,7 +246,16 @@ function filterPayments() {
 }
 
 function exportPayments() {
-    window.open('backend/admin/reports/export_payments.php', '_blank');
+    const status = document.getElementById('paymentStatusFilter').value;
+    const date = document.getElementById('paymentDateFilter').value;
+    const search = document.getElementById('paymentSearch').value;
+    
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    if (date) params.append('date', date);
+    if (search) params.append('search', search);
+    
+    window.open('backend/admin/reports/export_payments.php?' + params.toString(), '_blank');
 }
 
 function verifyPayment() {

@@ -133,8 +133,8 @@
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-number">01</div>
-                    <h3>Sign Up & Setup</h3>
-                    <p>Create your account and configure your business profile with station details and product offerings.</p>
+                    <h3>Login</h3>
+                    <p>Log in to your account to access your dashboard and manage your business profile.</p>
                     <div class="step-arrow">→</div>
                 </div>
 
